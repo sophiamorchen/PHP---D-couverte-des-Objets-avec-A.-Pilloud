@@ -1,0 +1,7 @@
+{
+    "name": "dell/live-3",
+    "description": "live 3 php oo",
+    "type": "project",
+    "license": "proprietary",
+    "require": {}
+}
