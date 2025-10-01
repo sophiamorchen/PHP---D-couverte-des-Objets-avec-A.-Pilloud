@@ -2,16 +2,16 @@
 
 <?php
 
-require_once 'Database/DbConnection.php';
+use App\Repository\PollRepository;
+
+require_once 'vendor/autoload.php';
 
 
-$dbConnection = DbConnection::getInstance();
-$dbConnection = DbConnection::getInstance();
-$dbConnection = DbConnection::getInstance();
-$dbConnection = DbConnection::getInstance();
-$dbConnection = DbConnection::getInstance();
+$PollManager = new PollRepository();
 
-$dbConnection->getPDO()->query('select * from poll');
+foreach ($PollManager->findAll() as $poll) {
+    echo '- ' .  $poll->description . '<br>';
+}
 
 
 
