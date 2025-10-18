@@ -47,7 +47,7 @@ class Router
 
         // Le premier élément est vide (avant le premier "/"), on le retire.
         array_shift($uriExploded); // Résultat : ["homepage", "index"]
-
+        var_dump($uriExploded);
         // ------------------------------
         // 3️⃣ Vérification de validité
         // ------------------------------
@@ -74,8 +74,8 @@ class Router
         // ------------------------------
         // Le dernier élément du tableau est le nom de la méthode (ex: "index", "show")
         $this->controllerMethod = array_pop($uriExploded);
+        var_dump($this->controllerMethod);
         $uriLength = count($uriExploded);
-
         // à ce stade :
         // Étape	Code exécuté	                       /!\ Résultat $uriExploded /!\	            Valeur extraite
         //  1	    explode('/', '/polls/show/1')	        ["", "polls", "show", "1"]	        —
@@ -96,6 +96,7 @@ class Router
             // ucfirst() met la première lettre en majuscule
             // Exemple : "homepage" → "Homepage"
             $controllerName .= ucfirst($uriPart) . $separator;
+            var_dump($controllerName);
             $counter++;
         }
 
@@ -107,6 +108,7 @@ class Router
         // On enregistre le nom final dans la propriété
         // Exemple : "App\Controller\Homepage"
         $this->controllerName = $controllerName;
+        var_dump($this->controllerName);
     }
 
     // ------------------------------
@@ -130,8 +132,8 @@ class Router
             if ($this->parameter) {
                 $data = $controller->{$this->controllerMethod}($this->parameter);
             } else {
-                // Pour une requête GET : on appelle la méthode correspondant à l’action
-                // Exemple : /article/show → $controller->show()
+        // Pour une requête GET : on appelle la méthode correspondant à l’action
+        // Exemple : /article/show → $controller->show()
 
                 $data = $controller->{$this->controllerMethod}();            }
 

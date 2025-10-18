@@ -8,11 +8,13 @@ class PollController
 {
     public function list()
     {
+
         $pollRepository = new PollRepository();
 
         return [
             'page' => 'polls/list',
             'polls' => $pollRepository->findAll(),
+
             ];
     }
 

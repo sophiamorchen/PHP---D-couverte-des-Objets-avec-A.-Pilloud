@@ -10,7 +10,7 @@
             <nav>
                 <ul>
                     <li><a href="/">Accueil</a></li>
-                    <li><a href="">Ma page</a></li>
+                    <li><a href="/poll/list">Liste des sondages</a></li>
                 </ul>
             </nav>
         </header>

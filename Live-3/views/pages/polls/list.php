@@ -4,16 +4,16 @@
 // Si $data['polls'] n’existe pas ou vaut null, alors on utilise un tableau vide [] grâce à l’opérateur "?? []".
 // Cela évite une erreur de type "Invalid argument supplied for foreach()".
 // À chaque tour de boucle, la variable $poll contient un objet ou un tableau représentant un sondage (poll).
+//        <!-- On crée un lien <a> cliquable pour chaque sondage -->
+/*        <!-- href="/poll/show/< echo $poll->id ?>" :*/
+//             Cette partie génère une URL de type /poll/show/1 ou /poll/show/2 selon l'ID du sondage.
+//             /poll → c’est la “section” ou le “contrôleur” (ArticlesController)
+//             show → c’est l’action ou la méthode à exécuter (ex: function show($id))
+/*             < echo $poll->id ?> → affiche dynamiquement l’identifiant unique du sondage dans l’URL.*/
+//             Ce lien pointera donc vers la page de détail de chaque sondage. -->
 foreach($data['polls'] ?? [] as $poll):
     ?>
     <div>
-        <!-- On crée un lien <a> cliquable pour chaque sondage -->
-        <!-- href="/articles/show/< echo $poll->id ?>" :
-             Cette partie génère une URL de type /articles/show/1 ou /articles/show/2 selon l'ID du sondage.
-             /articles → c’est la “section” ou le “contrôleur” (ArticlesController)
-             show → c’est l’action ou la méthode à exécuter (ex: function show($id))
-             < echo $poll->id ?> → affiche dynamiquement l’identifiant unique du sondage dans l’URL.
-             Ce lien pointera donc vers la page de détail de chaque sondage. -->
         <a href="/poll/show/<?php echo $poll->id ?>">
             <!-- À l’intérieur du lien, on affiche le titre du sondage -->
             <?php echo $poll->title ?>
