@@ -47,7 +47,6 @@ class Router
 
         // Le premier élément est vide (avant le premier "/"), on le retire.
         array_shift($uriExploded); // Résultat : ["homepage", "index"]
-        var_dump($uriExploded);
         // ------------------------------
         // 3️⃣ Vérification de validité
         // ------------------------------
@@ -74,7 +73,6 @@ class Router
         // ------------------------------
         // Le dernier élément du tableau est le nom de la méthode (ex: "index", "show")
         $this->controllerMethod = array_pop($uriExploded);
-        var_dump($this->controllerMethod);
         $uriLength = count($uriExploded);
         // à ce stade :
         // Étape	Code exécuté	                       /!\ Résultat $uriExploded /!\	            Valeur extraite
@@ -96,7 +94,6 @@ class Router
             // ucfirst() met la première lettre en majuscule
             // Exemple : "homepage" → "Homepage"
             $controllerName .= ucfirst($uriPart) . $separator;
-            var_dump($controllerName);
             $counter++;
         }
 
@@ -108,7 +105,6 @@ class Router
         // On enregistre le nom final dans la propriété
         // Exemple : "App\Controller\Homepage"
         $this->controllerName = $controllerName;
-        var_dump($this->controllerName);
     }
 
     // ------------------------------
@@ -128,22 +124,37 @@ class Router
         $controller = new $controllerName();
 
         // 3️⃣ Exécution selon le type de requête HTTP
-        if ($this->requestMethod === 'GET') {
+        // Pour une requête GET : on appelle la méthode correspondant à l’action
+        // Exemple : /article/show → $controller->show()
+        if ('GET' === $this->requestMethod ) {
             if ($this->parameter) {
                 $data = $controller->{$this->controllerMethod}($this->parameter);
             } else {
-        // Pour une requête GET : on appelle la méthode correspondant à l’action
-        // Exemple : /article/show → $controller->show()
 
-                $data = $controller->{$this->controllerMethod}();            }
+                $data = $controller->{$this->controllerMethod}();
+            }
+            return $data;
 
-        } elseif ($this->requestMethod === 'POST') {
-            // Pour une requête POST : ici tu pourras gérer les formulaires (à venir)
+        } if ('POST' === $this->requestMethod) {
+            if($this->parameter) {
+
+            } else {
+                $postedData = $_POST;
+                $postedData['date'] = new \DateTime('now');
+                $redirectUri = $controller->{$this->controllerMethod}($postedData);
+            }
+
+            // Pour une requête POST : ici -> gérer les formulaires (à venir)
             // Exemple : /user/login → $controller->login($_POST);
+            header('location:' . $redirectUri);
+
+            return null;
         }
+        throw new \Exception("HTTP method not allowed");
 
         // 4️⃣ Retourne les données obtenues
         // En général, le contrôleur renvoie un tableau que la vue affichera ensuite.
-        return $data;
+
     }
+
 }

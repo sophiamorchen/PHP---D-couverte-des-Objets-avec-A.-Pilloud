@@ -1,3 +1,5 @@
+<h1>Liste des sondages</h1>
+<a href="/poll/create">Ajouter un sondage</a>
 <?php
 // On commence une boucle foreach en PHP.
 // Elle parcourt le tableau $data['polls'] s’il existe.
