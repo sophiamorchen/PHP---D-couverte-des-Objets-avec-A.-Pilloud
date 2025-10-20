@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\PollRepository;
 
-class PollController
+class PollController extends AbstractController
 {
     public function list()
     {
@@ -33,18 +33,24 @@ class PollController
         if($postedData){
             // from POST method
             $pollRepository = new PollRepository();
+
           if ($pollRepository->create($postedData['title'], $postedData['description'])) {
               // message de succès
+              $this->addFlash('success_message', 'Sondage crée');
           } else {
               // message d'erreur
+              $this->addFlash('error_message', 'Une erreur est survenue');
           }
-            header('location:/poll/list');
+          return $this->redirectToUri('/poll/list');
         }
         return [
             'page' => 'polls/create',
 
-        ];
+
+            ];
+
     }
+
 }
 
-              
+

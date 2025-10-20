@@ -8,6 +8,7 @@ use App\Routing\Router;
 // Composer est le gestionnaire de dépendances PHP
 // 'vendor/autoload.php' charge automatiquement toutes les classes de notre projet et des packages installés
 require_once 'vendor/autoload.php';
+session_start();
 
 // On crée une instance de notre routeur
 // $_SERVER['REQUEST_METHOD'] contient la méthode HTTP de la requête (GET, POST, PUT, DELETE, etc.)

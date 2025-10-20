@@ -32,9 +32,7 @@ class Router
         // ------------------------------
         // 1️⃣ Redirection de la racine "/"
         // ------------------------------
-        if ($uri === "/") {
-            // Si l’utilisateur visite directement la racine du site,
-            // on le redirige vers "/homepage/index" par défaut.
+        if ('/' === $uri ) {
             $uri = '/homepage/index';
         }
 
@@ -44,6 +42,7 @@ class Router
         // On découpe l’URL avec "/" comme séparateur.
         // Exemple : "/homepage/index" → ["", "homepage", "index"]
         $uriExploded = explode('/', $uri);
+
 
         // Le premier élément est vide (avant le premier "/"), on le retire.
         array_shift($uriExploded); // Résultat : ["homepage", "index"]
@@ -56,7 +55,7 @@ class Router
             throw new \Exception("Page not found");
         }
         // ------------------------------
-        // 5️⃣ Construction du nom du contrôleur
+        // 4️⃣ Construction du nom du contrôleur
         // ------------------------------
         // On commence par le namespace de base :
         $controllerName = 'App\Controller\\'; // attention au double backslash (échappement PHP)
@@ -69,7 +68,7 @@ class Router
         }
 
         // ------------------------------
-        // 4️⃣ Extraction de la méthode du contrôleur
+        // 5️⃣ Extraction de la méthode du contrôleur
         // ------------------------------
         // Le dernier élément du tableau est le nom de la méthode (ex: "index", "show")
         $this->controllerMethod = array_pop($uriExploded);
@@ -112,7 +111,7 @@ class Router
     // ------------------------------
     // Cette méthode exécute le bon contrôleur + la bonne méthode selon l’URL.
     // Exemple : "/articles/show" → App\Controller\ArticlesController->show()
-    public function render(): array
+    public function render(): ?array
     {
         // 1️⃣ Reconstitution du nom complet de la classe contrôleur
         $controllerName = $this->controllerName . 'Controller';
@@ -133,6 +132,12 @@ class Router
 
                 $data = $controller->{$this->controllerMethod}();
             }
+
+            $data['success_message'] = $controller->getFlash('success_message');
+            $data['error_message'] = $controller->getFlash('error_message');
+
+
+
             return $data;
 
         } if ('POST' === $this->requestMethod) {
@@ -140,17 +145,17 @@ class Router
 
             } else {
                 $postedData = $_POST;
-                $postedData['date'] = new \DateTime('now');
-                $redirectUri = $controller->{$this->controllerMethod}($postedData);
-            }
+                $controller->{$this->controllerMethod}($postedData);
 
+                if($controller->getRedirectUri()) {
+                    header('location: ' . $controller->getRedirectUri());
+                }
+            }
             // Pour une requête POST : ici -> gérer les formulaires (à venir)
             // Exemple : /user/login → $controller->login($_POST);
-            header('location:' . $redirectUri);
-
-            return null;
         }
         throw new \Exception("HTTP method not allowed");
+
 
         // 4️⃣ Retourne les données obtenues
         // En général, le contrôleur renvoie un tableau que la vue affichera ensuite.

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class HomepageController
+class HomepageController extends AbstractController
 {
     public function index(): array
     {
