@@ -136,24 +136,26 @@ class Router
             $data['success_message'] = $controller->getFlash('success_message');
             $data['error_message'] = $controller->getFlash('error_message');
 
-
-
             return $data;
 
-        } if ('POST' === $this->requestMethod) {
+        }
+
+        if ('POST' === $this->requestMethod) {
+            $postedData = $_POST;
+
             if($this->parameter) {
-
+                $controller->{$this->controllerMethod}($this->parameter, $postedData);
             } else {
-                $postedData = $_POST;
                 $controller->{$this->controllerMethod}($postedData);
+            }
 
-                if($controller->getRedirectUri()) {
-                    header('location: ' . $controller->getRedirectUri());
-                }
+            if($controller->getRedirectUri()) {
+                header('location: ' . $controller->getRedirectUri());
             }
             // Pour une requête POST : ici -> gérer les formulaires (à venir)
             // Exemple : /user/login → $controller->login($_POST);
         }
+        var_dump($_SERVER['REQUEST_METHOD']);
         throw new \Exception("HTTP method not allowed");
 
 

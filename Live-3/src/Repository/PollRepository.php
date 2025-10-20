@@ -26,4 +26,15 @@ class PollRepository
 
         return $query->execute();
     }
+
+    public function update(object $poll) :bool
+    {
+        $query = DbConnection::getPDO()->prepare('update poll set title=:title, description=:description where id =:id');
+        $query->bindParam(':title', $poll->title);
+        $query->bindParam(':description', $poll->description);
+        $query->bindParam(':id', $poll->id);
+
+        return $query->execute();
+    }
+
 }
